@@ -1,4 +1,4 @@
-from .utils import LangChainChatBot
+from utils import LangChainChatBot
 import openai
 from dotenv import load_dotenv
 import os
@@ -18,13 +18,14 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # define a GPT chatbot class extending the base ChatBot class
 class LangChainGPTBot(LangChainChatBot):
-    def __init__(self, history=None, original_id=None, name=""):
+    def __init__(self, prompt_dir, history=None, original_id=None, name=""):
         super().__init__(history, original_id, name)
+        with open(os.path.join(prompt_dir, "init.txt"), "r") as f:
+            init_prompt = f.read()
+
         self.start_prompt = ChatPromptTemplate.from_messages(
             [
-                SystemMessagePromptTemplate.from_template(
-                    "The following is a friendly conversation between a human and a AI psychotherapist that offers Rogerian psychotherapy. The AI psychotherapist is caring about the human client, asking questions about their problems, and tries to make the client find solutions to their problems. If the AI does not know the answer to a question, it truthfully says it does not know. The AI therapist uses a scratchpad in its outputs to take notes. Information about the client on the scratchpad is formatted at the end of the message with python comments, namely with a # at the beginning of each line. \nExample: \nClient: Hi my name is John and my girlfriend broke up.\n# client's name: John\n# cause: girlfriend broke up."
-                ),
+                SystemMessagePromptTemplate.from_template(init_prompt),
                 MessagesPlaceholder(variable_name="history"),
                 HumanMessagePromptTemplate.from_template("{input}"),
             ]
@@ -34,6 +35,9 @@ class LangChainGPTBot(LangChainChatBot):
         self.conversation = ConversationChain(
             memory=self.memory, prompt=self.start_prompt, llm=self.llm, verbose=True
         )
+
+    def start_game(self):
+        return self.get_answer("")
 
     def get_answer(self, user_message):
         return self.conversation.predict(input=user_message)
