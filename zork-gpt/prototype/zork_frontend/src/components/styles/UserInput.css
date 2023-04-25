@@ -1,0 +1,28 @@
+input {
+    background: black;
+    font-family: 'VT323', monospace;
+    color: white;
+    border: none;
+    font-size: 25px;
+    width: 100%;
+    height: 20px;
+    padding: 0;
+    margin-left: 10px;
+    margin: 0;
+    outline: none;
+}
+
+
+.input-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    padding-top: 0px;
+}
+
+.input-prompt {
+    display: inline-block;
+    font-family: 'VT323', monospace;
+    color: white;
+    margin-right: 5px;
+}
