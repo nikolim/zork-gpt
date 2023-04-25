@@ -46,6 +46,12 @@ def parse_room_name(text):
         return None
 
 
+def ignore_ai_prefix(text):
+    ai_prefix_pattern = r"^(AI:)\s*"
+
+    return re.sub(ai_prefix_pattern, "", text, flags=re.IGNORECASE)
+
+
 # define a GPT chatbot class extending the base ChatBot class
 class LangChainGPTBot(LangChainChatBot):
     def __init__(self, prompt_dir, history=None, original_id=None, name=""):
@@ -143,7 +149,7 @@ class LangChainGPTBot(LangChainChatBot):
 
         answer = self.conversation.predict(input=user_message)
         answers = answer.split("#")
-        user_answer = answers[0]
+        user_answer = ignore_ai_prefix(answers[0])
         self.inventory = parse_bracket_content(answers[1])
         self.room = parse_room_name(answers[2])
 
