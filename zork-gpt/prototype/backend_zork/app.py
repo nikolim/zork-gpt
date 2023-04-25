@@ -11,6 +11,7 @@ from copy import deepcopy
 import chatbots
 from chatbots import ChatBot, SimpleGPTBot
 from chatbots.dialoGPTChatbot import DialoGPTBot
+from chatbots.langchainGPTChatbot import LangChainGPTBot
 
 app = Flask(__name__)
 CORS(app)
@@ -28,6 +29,8 @@ def get_model(model_name):
         return DialoGPTBot
     elif model_name == "ChatBot_v3":
         return ChatBot
+    elif model_name == "langchain GPT Chatbot":
+        return LangChainGPTBot
     else:
         return ChatBot
 
