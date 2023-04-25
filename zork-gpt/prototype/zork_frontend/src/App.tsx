@@ -38,17 +38,9 @@ function App() {
   const send_user_message = async (id: string, message: Message) => {
     let appendMessages = [...conversation.messages, message];
     setConversation({id: id, messages: appendMessages});
-    // send the message to the backend
+    // request answer from the backend
     try {
-        const url = 'http://127.0.0.1:5000/api/submit_message';
-        const data = {id: id, message: message.text, sender: 'user'};
-        const response = await axios.post(url, data);
-    } catch (error) {
-        console.error('Error sending data:', error);
-    }
-    // get the response from the backend
-    try {
-        const response = await axios.get('http://127.0.0.1:5000/api/request_answer', {params: {id: id}});
+        const response = await axios.get('http://127.0.0.1:5000/api/request_answer', {params: {id: id, message: message.text}});
         if (response.status === 200) {
             const new_messages : Message =  {type: 'zork-gpt', text: response.data[0].message};
             console.log("getting asnwer:", new_messages);
