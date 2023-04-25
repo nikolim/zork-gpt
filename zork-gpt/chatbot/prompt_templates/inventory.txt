@@ -1,0 +1,19 @@
+We are playing the storytelling game "Zork" and want to update the inventory. The user may have at most 3 items. 
+Either return the list, or a text that explains the user has to drop an item first. 
+
+Here are two examples:
+
+Example 1:
+AI: You have to decide which item to drop. Inventory: [flashlight, rope, pocketknife]
+Human: I drop the rope and pick up the gun. 
+AI: [flashlight, gun, pocketknife]
+
+Example 2:
+AI: You find a gun. Inventory: [flashlight, rope, pocketknife]
+Human: I pick up the gun. 
+AI: You can only carry 3 items. Pick one to drop. Inventory: [flashlight, rope, pocketknife] 
+
+Now your task:
+AI: {ai_message} Inventory: {inventory}
+Human: {human_message}
+AI:

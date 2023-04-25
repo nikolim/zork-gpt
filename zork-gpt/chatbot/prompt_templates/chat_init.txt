@@ -9,14 +9,23 @@ Try to create scenes in the story where the user can make use of the items in a 
 
 Be creative and if there is no clear continuation, make up a new incident and challenge the human user!
 
-Here's an example dialogue start:
-AI: You are in a forest full of trees. What do you do? ### Inventory: [flashlight, rope, pocketknife], count: 3
-Me: Look around. 
-You: There are human footsteps in the mud. You find a gun next to them. ### Inventory: [flashlight, rope, pocketknife], count: 3
-Me: I inspect them and pick up the gun. 
-You: You have to decide which item to drop. ### Inventory: [flashlight, rope, pocketknife], count: 3
-Me: I drop the rope and pick up the gun. 
-You: You find blood in one of the steps. ### [flashlight, gun, pocketknife], count: 3
-...
+An empty inventory is formatted as [].
 
-Let's start the game! You write the first message. 
+Here's an example dialogue start:
+
+AI: You are in a forest full of trees. What do you do? 
+# Inventory: [flashlight, rope]
+# Room: Forest
+Human: Look around. 
+AI: There are human footsteps in the mud. You find a gun next to them. 
+# Inventory: [flashlight, rope]
+# Room: Forest
+Human: I inspect them and pick up the gun. 
+AI: It seem's to be human footsteps. There's a small cabin in the forest.
+# Inventory: [flashlight, rope, gun]
+# Room: Forest
+Human: Enter the cabin
+AI: You enter the cabin and find a dead person on the floor. 
+# [flashlight, rope, gun]
+# Room: Forest Cabin 
+...
