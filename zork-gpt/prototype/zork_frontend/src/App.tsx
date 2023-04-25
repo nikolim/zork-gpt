@@ -11,6 +11,8 @@ import axios from 'axios';
 
 function App() {
   const [conversation, setConversation] = useState<Conversation>({id: uuidv4(), messages: [{type: 'zork-gpt', text: 'Welcome to zork-gpt!'}]});
+  const [inventory, setInventory] = useState<[]>([]);
+  const [room, setRoom] = useState<string>("");
 
   const createChat = async (id: string) => {
     try {
@@ -25,6 +27,8 @@ function App() {
         const new_messages : Message =  {type: 'zork-gpt', text: response.data[0].message};
         const appendMessages = [...conversation.messages, new_messages];
         setConversation({id: id, messages: appendMessages});
+        setRoom(response.data[0].room);
+        setInventory(response.data[0].inventory);
         // Handle the response data as needed
       } catch (error) {
         console.error('Error sending data:', error);
@@ -45,7 +49,8 @@ function App() {
             const new_messages : Message =  {type: 'zork-gpt', text: response.data[0].message};
             console.log("getting asnwer:", new_messages);
             appendMessages = [...appendMessages, new_messages];
-            
+            setRoom(response.data[0].room);
+            setInventory(response.data[0].inventory);
         } else {
             console.error(`Error fetching chat response: ${response.status}`);
         }
@@ -58,11 +63,11 @@ function App() {
 
 
   const getLocation = () => {
-    return "Mansion ground floor"
+    return room;
   };
 
   const getInventory = () => {
-    return "flashlight, lighter"
+    return inventory.toString();
   };
 
   const sendMsg = (msg: Message) => {
