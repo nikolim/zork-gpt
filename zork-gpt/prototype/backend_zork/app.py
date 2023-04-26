@@ -13,6 +13,7 @@ from chatbots import ChatBot, SimpleGPTBot
 from chatbots.dialoGPTChatbot import DialoGPTBot
 from chatbots.langchainGPTChatbot import LangChainGPTBot
 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -44,6 +45,7 @@ def create_chat():
     print(model_name)
     print("Creating chat with id: {}".format(id))
     chatbot = get_model(model_name)(
+        prompt_dir="chatbots/prompt_templates",
         original_id=id,
         name="",
     )
@@ -55,10 +57,10 @@ def create_chat():
     print("created first AI message")
     return first_message
     
-@app.route("/api/get_chat_ids", methods=["GET"])
-def get_chat_ids():
-    ids_with_names = {k: v["name"] for k, v in saved_chats.items() if v}
-    return jsonify(ids_with_names)
+# @app.route("/api/get_chat_ids", methods=["GET"])
+# def get_chat_ids():
+#     ids_with_names = {k: v["name"] for k, v in saved_chats.items() if v}
+#     return jsonify(ids_with_names)
 
 
 # @app.route("/api/submit_message", methods=["POST"])

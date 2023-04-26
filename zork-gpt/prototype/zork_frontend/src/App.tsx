@@ -21,7 +21,7 @@ function App() {
       //     key1: 'value1',
       //     key2: 'value2',
       //   };
-        const data = {id: id, model_name: "DialoGPT Chatbot"}
+        const data = {id: id, model_name: "langchain GPT Chatbot"}
     
         const response = await axios.post(url, data);
         const new_messages : Message =  {type: 'zork-gpt', text: response.data[0].message};

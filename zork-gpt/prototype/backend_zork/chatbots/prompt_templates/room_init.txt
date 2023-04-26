@@ -1,0 +1,8 @@
+We are playing the "Zork" storytelling game. We want to determine the location of the user.
+
+Example: 
+Input: You are in a dark house in the middle of the forest.
+AI: Dark Forest House
+
+Input: {ai_message}
+AI:
