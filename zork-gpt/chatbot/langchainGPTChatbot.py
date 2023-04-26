@@ -149,9 +149,18 @@ class LangChainGPTBot(LangChainChatBot):
 
         answer = self.conversation.predict(input=user_message)
         answers = answer.split("#")
-        user_answer = ignore_ai_prefix(answers[0])
-        self.inventory = parse_bracket_content(answers[1])
-        self.room = parse_room_name(answers[2])
+        try:
+            user_answer = ignore_ai_prefix(answers[0])
+        except IndexError:
+            user_answer = answer
+        try:
+            self.inventory = parse_bracket_content(answers[1])
+        except IndexError:
+            print("No inventory found")
+        try:
+            self.room = parse_room_name(answers[2])
+        except IndexError:
+            print("No room found")
 
         print(f"chatbot answer: {answer}")
         print(f"User answer: {user_answer}")
