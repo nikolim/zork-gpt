@@ -1,0 +1,36 @@
+.Terminal {
+    padding: 10px;
+    padding-bottom: 0px;
+    height: calc(100vh - 35px - 10px - 35px);
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: flex-start;
+  }  
+.terminal-line {
+    margin-bottom: 10px;
+}
+.terminal-text {
+    color: white;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #333;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #bbb;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #999;
+  }
