@@ -21,14 +21,14 @@ function App() {
       //     key1: 'value1',
       //     key2: 'value2',
       //   };
-        const data = {id: id, model_name: "DialoGPT Chatbot"}
+        const data = {id: id, model_name: "langchain GPT Chatbot"}
     
         const response = await axios.post(url, data);
-        const new_messages : Message =  {type: 'zork-gpt', text: response.data[0].message};
+        const new_messages : Message =  {type: 'zork-gpt', text: response.data.message};
         const appendMessages = [...conversation.messages, new_messages];
         setConversation({id: id, messages: appendMessages});
-        setRoom(response.data[0].room);
-        setInventory(response.data[0].inventory);
+        setRoom(response.data.room);
+        setInventory(response.data.inventory);
         // Handle the response data as needed
       } catch (error) {
         console.error('Error sending data:', error);
@@ -43,14 +43,15 @@ function App() {
     let appendMessages = [...conversation.messages, message];
     setConversation({id: id, messages: appendMessages});
     // request answer from the backend
+    console.log(message);
     try {
-        const response = await axios.get('http://127.0.0.1:5000/api/request_answer', {params: {id: id, message: message.text}});
+        const response = await axios.post('http://127.0.0.1:5000/api/request_answer', {id: id, message: message.text});
         if (response.status === 200) {
-            const new_messages : Message =  {type: 'zork-gpt', text: response.data[0].message};
+            const new_messages : Message =  {type: 'zork-gpt', text: response.data.message};
             console.log("getting asnwer:", new_messages);
             appendMessages = [...appendMessages, new_messages];
-            setRoom(response.data[0].room);
-            setInventory(response.data[0].inventory);
+            setRoom(response.data.room);
+            setInventory(response.data.inventory);
         } else {
             console.error(`Error fetching chat response: ${response.status}`);
         }
