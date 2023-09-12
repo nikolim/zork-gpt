@@ -69,7 +69,6 @@ jobs:
           eb create flask-env
 
       - name: Update existing flask env
-        if: failure()
         working-directory: ./backend
         run: |
           eb deploy 
