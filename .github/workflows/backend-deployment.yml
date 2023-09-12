@@ -55,7 +55,6 @@ jobs:
         run: |
           eb init -p python-3.9 Flask_Basic --region eu-central-1
 
-      # deploy API with different environment names based on branch
-      - name: Create test environment & deploy
+      - name: Create prod environment & deploy
         run: |
-          (eb use ${{ github.ref }} && eb status ${{ github.ref }} && eb deploy) || eb create ${{ github.ref }}
+          (eb use prod-environment && eb status prod-environment && eb deploy) || eb create prod-environment
