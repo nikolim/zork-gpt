@@ -9,6 +9,8 @@ import { Conversation, Message } from './custom_types';
 import axios from 'axios';
 
 
+const baseUrl = 'http://flask-env.eba-3gituzjt.us-east-2.elasticbeanstalk.com/'
+
 function App() {
   const [conversation, setConversation] = useState<Conversation>({id: uuidv4(), messages: [{type: 'zork-gpt', text: 'Welcome to zork-gpt!'}]});
   const [inventory, setInventory] = useState<[]>([]);
@@ -16,7 +18,7 @@ function App() {
 
   const createChat = async (id: string) => {
     try {
-        const url = 'http://127.0.0.1:5000/api/create_chat';
+        const url = baseUrl + 'api/create_chat';
       //   const data = {
       //     key1: 'value1',
       //     key2: 'value2',
@@ -45,7 +47,7 @@ function App() {
     // request answer from the backend
     console.log(message);
     try {
-        const response = await axios.post('http://127.0.0.1:5000/api/request_answer', {id: id, message: message.text});
+        const response = await axios.post(baseUrl + 'api/request_answer', {id: id, message: message.text});
         if (response.status === 200) {
             const new_messages : Message =  {type: 'zork-gpt', text: response.data.message};
             console.log("getting asnwer:", new_messages);
