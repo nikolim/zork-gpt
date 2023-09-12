@@ -1,0 +1,61 @@
+name: Deploy backend to Elastic Beanstalk
+
+on:
+  push:
+    branches: [main, dev, prod]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+  
+  deploy:
+    needs:
+      - build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.9"
+
+      - name: Get EB CLI version
+        run: |
+          python -m pip install --upgrade pip
+          pip install awsebcli --upgrade
+          eb --version
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Create EBS application
+        run: |
+          eb init -p python-3.9 Flask_Basic --region eu-central-1
+
+      # deploy API with different environment names based on branch
+      - name: Create test environment & deploy
+        run: |
+          (eb use ${{ github.ref }} && eb status ${{ github.ref }} && eb deploy) || eb create ${{ github.ref }}
