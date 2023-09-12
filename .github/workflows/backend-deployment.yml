@@ -2,7 +2,7 @@ name: Deploy backend to Elastic Beanstalk
 
 on:
   push:
-    branches: [main, dev, prod]
+    branches: [main, dev, prod, clean-up-and-deploy]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
