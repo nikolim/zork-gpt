@@ -3,11 +3,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 import os
-import uuid
-from copy import deepcopy
 
-# from typing import Optional
-# import time
+from typing import Optional
+import time
 import chatbots
 from chatbots import ChatBot, SimpleGPTBot
 from chatbots.dialoGPTChatbot import DialoGPTBot
@@ -57,22 +55,22 @@ def create_chat():
     print("created first AI message")
     return first_message
     
-# @app.route("/api/get_chat_ids", methods=["GET"])
-# def get_chat_ids():
-#     ids_with_names = {k: v["name"] for k, v in saved_chats.items() if v}
-#     return jsonify(ids_with_names)
+# # @app.route("/api/get_chat_ids", methods=["GET"])
+# # def get_chat_ids():
+# #     ids_with_names = {k: v["name"] for k, v in saved_chats.items() if v}
+# #     return jsonify(ids_with_names)
 
 
-# @app.route("/api/submit_message", methods=["POST"])
-# def submit_message():
-#     current_id = request.json["id"]
-#     message = request.json["message"]
-#     sender = request.json["sender"]
-#     print(current_id)
-#     chatbot = chatbots[current_id]
-#     chatbot.get_answer(message)
-#     print("messages: {}".format(chatbot.history))
-#     return jsonify({"status": "success"})
+# # @app.route("/api/submit_message", methods=["POST"])
+# # def submit_message():
+# #     current_id = request.json["id"]
+# #     message = request.json["message"]
+# #     sender = request.json["sender"]
+# #     print(current_id)
+# #     chatbot = chatbots[current_id]
+# #     chatbot.get_answer(message)
+# #     print("messages: {}".format(chatbot.history))
+# #     return jsonify({"status": "success"})
 
 
 @app.route("/api/request_answer", methods=["POST"])
@@ -111,4 +109,7 @@ def set_models():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+
+    # check if there is a production environment variable
+    PRODUCTION = os.environ.get("PRODUCTION", False)
+    app.run(debug=(not PRODUCTION))
