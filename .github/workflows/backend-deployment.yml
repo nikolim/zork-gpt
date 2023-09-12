@@ -1,0 +1,68 @@
+name: Deploy backend to Elastic Beanstalk
+
+on:
+  push:
+    branches: [main, dev, prod, clean-up-and-deploy]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create .env file
+        run: |
+          echo ${{ secrets.OPENAI_API_KEY }} >> backend/chatbots/.env
+          echo "PRODUCTION=true" >> backend/chatbots/.env
+  
+  deploy:
+    needs:
+      - build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.9"
+
+      - name: Get EB CLI version
+        run: |
+          python -m pip install --upgrade pip
+          pip install awsebcli --upgrade
+          eb --version
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Create Elastic Beanstalk application
+        working-directory: ./backend
+        run: |
+          eb init -p python-3.9 zork-flask-api --region us-east-2
+
+      - name: Create flask env
+        working-directory: ./backend
+        run: |
+          eb create flask-env
