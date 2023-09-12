@@ -60,7 +60,7 @@ jobs:
       - name: Create Elastic Beanstalk application
         working-directory: ./backend
         run: |
-          eb init -p python-3.9 zork-flask-api --region eu-central-1
+          eb init -p python-3.9 zork-flask-api --region us-east-2
 
       - name: Create flask env
         working-directory: ./backend

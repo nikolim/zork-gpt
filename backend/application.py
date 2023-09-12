@@ -7,35 +7,23 @@ import os
 from typing import Optional
 import time
 import chatbots
-from chatbots import ChatBot, SimpleGPTBot
-from chatbots.dialoGPTChatbot import DialoGPTBot
 from chatbots.langchainGPTChatbot import LangChainGPTBot
 
 
-app = Flask(__name__)
-CORS(app)
-
-models = ["DefaultChatBot", "Simple GPT Chatbot", "DialoGPT Chatbot"]
+application = Flask(__name__)
+CORS(application)
 
 
 def get_model(model_name):
-    if model_name == "DefaultChatBot":
-        print("Loading ChatBot_v1")
-        return ChatBot
-    elif model_name == "Simple GPT Chatbot":
-        return SimpleGPTBot
-    elif model_name == "DialoGPT Chatbot":
-        return DialoGPTBot
-    elif model_name == "ChatBot_v3":
-        return ChatBot
-    elif model_name == "langchain GPT Chatbot":
         return LangChainGPTBot
-    else:
-        return ChatBot
 
 chatbots = {}
 
-@app.route("/api/create_chat", methods=["POST"])
+@application.route("/api/healthy", methods=["GET"])
+def healthy():
+    return "healthy"
+
+@application.route("/api/create_chat", methods=["POST"])
 def create_chat():
     dict_return = {}
     id = request.json.get("id")
@@ -55,41 +43,17 @@ def create_chat():
     print("created first AI message")
     return first_message
     
-# # @app.route("/api/get_chat_ids", methods=["GET"])
-# # def get_chat_ids():
-# #     ids_with_names = {k: v["name"] for k, v in saved_chats.items() if v}
-# #     return jsonify(ids_with_names)
 
-
-# # @app.route("/api/submit_message", methods=["POST"])
-# # def submit_message():
-# #     current_id = request.json["id"]
-# #     message = request.json["message"]
-# #     sender = request.json["sender"]
-# #     print(current_id)
-# #     chatbot = chatbots[current_id]
-# #     chatbot.get_answer(message)
-# #     print("messages: {}".format(chatbot.history))
-# #     return jsonify({"status": "success"})
-
-
-@app.route("/api/request_answer", methods=["POST"])
+@application.route("/api/request_answer", methods=["POST"])
 def request_answer():
     current_id = request.json["id"]
     message = request.json["message"]
     chatbot = chatbots[current_id]
     answer = chatbot.get_answer(message)
-    # wait for 1 second to simulate a delay
-    # time.sleep(1)
     return answer
 
 
-@app.route("/api/get_models", methods=["GET"])
-def get_models():
-    return jsonify(models)
-
-
-@app.route("/api/set_model", methods=["POST"])
+@application.route("/api/set_model", methods=["POST"])
 def set_models():
     current_id = request.json["current_id"]
     model = request.json["model"]
@@ -112,4 +76,4 @@ if __name__ == "__main__":
 
     # check if there is a production environment variable
     PRODUCTION = os.environ.get("PRODUCTION", False)
-    app.run(debug=(not PRODUCTION))
+    application.run(debug=(not PRODUCTION))
