@@ -10,7 +10,7 @@ on:
 
 jobs:
   # To build the project
-  build-tambola:
+  build-zork-gpt:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out code
@@ -20,8 +20,10 @@ jobs:
         with:
           node-version: "16"
       - name: Installing dependencies
+        working-directory: ./frontend
         run: npm install
       - name: Building project
+        working-directory: ./frontend
         run: npm run build
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -31,4 +33,5 @@ jobs:
           aws-region: eu-central-1
 
       - name: Deploy to S3 bucket
+        working-directory: ./frontend
         run: aws s3 sync ./dist/ s3://zork-gpt --delete
