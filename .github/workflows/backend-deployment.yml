@@ -20,9 +20,15 @@ jobs:
           python-version: "3.9"
 
       - name: Install dependencies
+        working-directory: ./backend
         run: |
           python -m pip install --upgrade pip
-          pip install -r backend/requirements.txt
+          pip install -r requirements.txt
+
+      - name: Create .env file
+        run: |
+          echo ${{ secrets.OPENAI_API_KEY }} >> backend/chatbots/.env
+          echo "PRODUCTION=true" >> backend/chatbots/.env
   
   deploy:
     needs:
@@ -51,10 +57,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
 
-      - name: Create EBS application
+      - name: Create Elastic Beanstalk application
+        working-directory: ./backend
         run: |
-          eb init -p python-3.9 Flask_Basic --region eu-central-1
+          eb init -p python-3.9 zork-flask-api --region eu-central-1
 
-      - name: Create prod environment & deploy
+      - name: Create flask env
+        working-directory: ./backend
         run: |
-          (eb use prod-environment && eb status prod-environment && eb deploy) || eb create prod-environment
+          eb create flask-env
