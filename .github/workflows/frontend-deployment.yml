@@ -34,4 +34,4 @@ jobs:
 
       - name: Deploy to S3 bucket
         working-directory: ./frontend
-        run: aws s3 sync ./dist/ s3://zork-gpt --delete
+        run: aws s3 sync ./build/ s3://zork-gpt --delete
